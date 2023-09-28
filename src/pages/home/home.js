@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { View, Text, ActivityIndicator, FlatList } from 'react-native'
+import { View, Text, ActivityIndicator, FlatList, StyleSheet, SafeAreaView } from 'react-native'
 import api from '../../services/index'
 import CardCompleto from '../../components/cardCompleto/cardCompleto'
 
@@ -10,6 +10,7 @@ function Home(){
     const [artigos,setArtigos] = useState([])
     const [loading,setLoading] = useState(true)
     
+
     async function consultarArtigos(categoria){
         // evita que o site faça consultas repetidas
         if (artigos.length === 0){
@@ -20,6 +21,7 @@ function Home(){
 
         setLoading(false)
     } 
+
 
     useEffect(() => {
         consultarArtigos('business,politics') 
@@ -34,35 +36,30 @@ function Home(){
     }
 
     const politics = artigos.filter((item) => {
-        return item.category.some((categoria) => categoria === "politics")
+        item.category.some(categoria => categoria === "politics") 
     })
 
     const business = artigos.filter((item) => {
-        return item.category.some((categoria) => categoria === "business")
+        if (item.category.some((categoria) => categoria === "business") === true) return item
     })
 
     return (
         <View style={styles.container}>
 
             {/* sessão politica */}
-            <Text style={styles.titulo}> Politica </Text>
+            <Text style={styles.titulo}> Politica: {politics.length} </Text>
             {/* renderiza os artigos de determinada categoria  */}
-            <FlatList data={politics}
-                      renderItem={(item) => {
-                          <CardCompleto 
-                                id={item.article_id}
-                                font={item.source_id}
-                                title={item.title}
-                                image={item.image_url}
-                                date={item.pubDate}
-                                category={categoria}
-                            />
-                        }}
-                        keyExtractor={item.article_id}
-                />
-           
+            
+                <FlatList data={artigos}
+                        renderItem={({item}) => ( 
+                                <CardCompleto data={item} />
+                            )}
 
-            {/* sessão negocios */}
+                        keyExtractor={item => item.article_id}
+                    />
+            
+
+            {/* sessão negocios
             <Text style={styles.titulo}> Business </Text>
             <FlatList data={business}
                       renderItem={(item) => {
@@ -76,7 +73,7 @@ function Home(){
                           />
                         }}
                        keyExtractor={item.article_id}
-            />
+            /> */}
             
         </View>
     );
@@ -84,15 +81,20 @@ function Home(){
 
 // objeto de estilos
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'violet',
+        padding: 10,
+        paddingTop: 100
+    },
     active: {
         size: 'large',
         color: '#5297FF'
     },
-    container: {
-
-    },
     titulo: {
-        
+        backgroundColor:'blue'
     }
 })
 

@@ -1,7 +1,10 @@
+// import Home from "./src/pages/home/home";
 import Home from "./src/pages/home/home";
 
-export default function App() {
+function App() {
   return (
     <Home />
   );
 }
+
+export default App
