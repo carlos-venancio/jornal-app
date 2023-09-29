@@ -1,7 +1,14 @@
 import { View, Text, Image, StyleSheet } from "react-native";
+import Artigos from "../../artigosContext";
+import { useContext } from "react";
 
 // informações do artigo
-function Artigo({data}){
+function Artigo({ route, navigation }){
+
+    console.log(id)
+    const { id } = route.params
+    const data = useContext(Artigos).filter(item => item.article.id === id)
+
 
     return (
         <View style={styles.container}>
@@ -38,3 +45,5 @@ const styles = StyleSheet.create({
         
     }
 })
+
+export default Artigo
